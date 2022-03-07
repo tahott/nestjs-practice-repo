@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>App</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    {{#if user}} welcome {{ user }} {{/if}}
+    <div>
+      <table>
+        <tr>
+          <td><labelfor="email">email: </label></td>
+          <td><input id="email" name="email" type="email" /></td>
+        </tr>
+        <tr>
+          <td><label for="password">password: </label></td>
+          <td><input id="password" name="password" type="password" /></td>
+        </tr>
+      </table>
+      <button onclick="handle()">send</button>
+    </div>
+    <script>
+      function handle() {
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        const urlencoded = new URLSearchParams();
+        urlencoded.append("email", email);
+        urlencoded.append("password", password);
+
+        const requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: urlencoded,
+        };
+
+        fetch("http://localhost:3000/auth/session", requestOptions)
+          .then(response => response.text())
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error));
+      }
+    </script>
+  </body>
+</html>
