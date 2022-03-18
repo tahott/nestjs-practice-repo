@@ -1,27 +1,25 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { UserController } from './user.controller';
 
 @Module({
   imports: [
     ClientsModule.register([
       {
-        name: 'CAFE_SERVICE',
+        name: 'COFFEE_SHOP_USER',
         transport: Transport.KAFKA,
         options: {
           client: {
-            clientId: 'cafe',
+            clientId: 'user',
             brokers: ['localhost:9092'],
           },
           consumer: {
-            groupId: 'cafe-service',
+            groupId: 'user',
           },
         },
       },
     ]),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [UserController]
 })
-export class AppModule {}
+export class UserModule {}
