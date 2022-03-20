@@ -1,20 +1,12 @@
-import { Controller, Inject, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { ClientKafka, Ctx, KafkaContext, MessagePattern, Payload } from '@nestjs/microservices';
+import { BaristaService } from './barista.service';
 
 @Controller('barista')
-export class BaristaController implements OnModuleInit, OnModuleDestroy {
-  constructor(
-    @Inject('COFFEE_SHOP_BARISTA') private readonly client: ClientKafka,
-  ) { }
-  async onModuleInit() {
-    await this.client.connect();
-  }
+export class BaristaController {
+  constructor() { }
 
-  async onModuleDestroy() {
-    await this.client.close();
-  }
-
-  @MessagePattern('order')
+  @MessagePattern('order.success')
   recvOrderMsg(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
@@ -28,9 +20,9 @@ export class BaristaController implements OnModuleInit, OnModuleDestroy {
 
     console.log(res);
 
-    setTimeout(() => {
-      this.client.emit('order.state', Object.assign(originMessage.value, { state: 'completed', date: new Date() }));
-    }, Math.floor(Math.random() * (10000 - 3000)) + 3000);
+    BaristaService.insertOrder(
+      JSON.parse(JSON.stringify(originMessage.value)).name
+    );
 
     return res;
   }

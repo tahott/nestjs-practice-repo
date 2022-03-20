@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { AppController } from './app.controller';
-import { BaristaController } from './barista/barista.controller';
 import { BaristaModule } from './barista/barista.module';
 import { ManagerModule } from './manager/manager.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
     BaristaModule,
     ManagerModule,
+    PaymentModule,
   ],
-  // controllers: [, BaristaController],
+  controllers: [],
 })
 export class AppModule {}
